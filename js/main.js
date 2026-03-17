@@ -8,10 +8,10 @@ const WORKER_URL = "https://plain-violet-1e1a.pavanafrancisco.workers.dev";
 
 // ── CONFIGURACIÓN ODOO (otros formularios) ──────────────────────
 const ODOO_CONFIG = {
-  baseUrl: 'https://mundocharro.odoo.com',
+  baseUrl: 'https://mundocharro.odoo.com/odoo',
   db: 'mundocharro',
   username: 'francisco.pavana@mundocharr.mx',
-  password: '5b6e1d87bc8fe4011f9a337ec202e3f407a9f119',
+  password: 'cbd7980aef0e5a56d5b9f26abc18c5a53ad54109',
 };
 
 // ── ODOO JSON-RPC CLIENT ────────────────────────────────────────
