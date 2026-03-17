@@ -3,13 +3,15 @@
    Odoo JSON-RPC integration + UI utilities
    ================================================================ */
 
-// ── CONFIGURACIÓN ODOO ──────────────────────────────────────────
+// ── CLOUDFLARE WORKER (Hotel) ───────────────────────────────────
+const WORKER_URL = "https://plain-violet-1e1a.pavanafrancisco.workers.dev";
+
+// ── CONFIGURACIÓN ODOO (otros formularios) ──────────────────────
 const ODOO_CONFIG = {
-  // CAMBIA ESTO a tu URL de Odoo (ej: https://miempresa.odoo.com)
-  baseUrl: 'https://TU-DOMINIO.odoo.com',
-  db: 'TU-DATABASE-NAME',      // nombre de tu base de datos en Odoo
-  username: 'tu-email@odoo.com', // usuario API
-  password: 'TU-API-KEY',        // API Key de Odoo (Settings > Technical > API Keys)
+  baseUrl: 'https://mundocharro.odoo.com',
+  db: 'mundocharro',
+  username: 'francisco.pavana@mundocharr.mx',
+  password: '5b6e1d87bc8fe4011f9a337ec202e3f407a9f119',
 };
 
 // ── ODOO JSON-RPC CLIENT ────────────────────────────────────────
@@ -55,7 +57,6 @@ class OdooAPI {
     });
   }
 
-  // Crear Lead en CRM
   async createLead(data) {
     return await this.createRecord('crm.lead', {
       name: data.name,
@@ -69,7 +70,6 @@ class OdooAPI {
     });
   }
 
-  // Crear Oportunidad (para reservas confirmadas)
   async createOpportunity(data) {
     return await this.createRecord('crm.lead', {
       name: data.name,
@@ -82,9 +82,7 @@ class OdooAPI {
     });
   }
 
-  // Crear Orden de Venta (para boletos)
   async createSaleOrder(data) {
-    // Buscar o crear cliente
     const partnerId = await this.findOrCreatePartner(data);
     const orderId = await this.createRecord('sale.order', {
       partner_id: partnerId,
@@ -153,30 +151,30 @@ async function submitForm(btn, action) {
   }
 }
 
-// ── RESERVA HOTEL → CRM LEAD ────────────────────────────────────
+// ── RESERVA HOTEL → CLOUDFLARE WORKER → ODOO ───────────────────
 window.submitHotelReserva = async function(e) {
   e.preventDefault();
   const f = e.target;
   const btn = f.querySelector('[type=submit]');
   await submitForm(btn, async () => {
-    const checkin  = f.checkin?.value  || '';
-    const checkout = f.checkout?.value || '';
-    const hab      = f.habitacion?.value || '';
-    const huespedes = f.huespedes?.value || '1';
-    const nombre   = f.nombre?.value || '';
-    const email    = f.email?.value  || '';
-    const telefono = f.telefono?.value || '';
-    const notas    = f.notas?.value || '';
-
-    const leadId = await odoo.createOpportunity({
-      name: `Reserva Hotel — ${nombre} | Check-in: ${checkin}`,
-      contactName: nombre,
-      email,
-      phone: telefono,
-      description: `Check-in: ${checkin}\nCheck-out: ${checkout}\nHabitación: ${hab}\nHuéspedes: ${huespedes}\nNotas: ${notas}`,
-      revenue: 0,
+    const payload = {
+      nombre:     f.nombre?.value || '',
+      email:      f.email?.value || '',
+      telefono:   f.telefono?.value || '',
+      checkin:    f.checkin?.value || '',
+      checkout:   f.checkout?.value || '',
+      habitacion: f.habitacion?.value || '',
+      huespedes:  f.huespedes?.value || '',
+      notas:      f.notas?.value || '',
+    };
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
     });
-    showToast('¡Reserva recibida!', `Tu solicitud fue enviada. ID de referencia: #${leadId}. Te contactaremos pronto.`);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    showToast('¡Reserva recibida!', `Tu solicitud fue enviada. ID: #${data.leadId}. Te contactaremos pronto.`);
     f.reset();
   });
 };
@@ -187,15 +185,15 @@ window.submitConvencionReserva = async function(e) {
   const f = e.target;
   const btn = f.querySelector('[type=submit]');
   await submitForm(btn, async () => {
-    const empresa  = f.empresa?.value  || '';
-    const contacto = f.contacto?.value || '';
-    const email    = f.email?.value    || '';
-    const telefono = f.telefono?.value || '';
-    const fecha    = f.fecha?.value    || '';
-    const espacio  = f.espacio?.value  || '';
+    const empresa    = f.empresa?.value    || '';
+    const contacto   = f.contacto?.value   || '';
+    const email      = f.email?.value      || '';
+    const telefono   = f.telefono?.value   || '';
+    const fecha      = f.fecha?.value      || '';
+    const espacio    = f.espacio?.value    || '';
     const asistentes = f.asistentes?.value || '';
     const tipoEvento = f.tipo_evento?.value || '';
-    const desc     = f.descripcion?.value || '';
+    const desc       = f.descripcion?.value || '';
 
     const leadId = await odoo.createLead({
       name: `Evento Convenciones — ${empresa} | ${tipoEvento} | ${fecha}`,
@@ -233,15 +231,14 @@ window.submitBoletoFIFA = async function(e) {
   const f = e.target;
   const btn = f.querySelector('[type=submit]');
   await submitForm(btn, async () => {
-    const nombre   = f.nombre?.value   || '';
-    const email    = f.email?.value    || '';
-    const telefono = f.telefono?.value || '';
+    const nombre    = f.nombre?.value    || '';
+    const email     = f.email?.value     || '';
+    const telefono  = f.telefono?.value  || '';
     const categoria = f.categoria?.value || 'General';
-    const cantidad = parseInt(f.cantidad?.value || '1');
-    const precios  = { 'VIP': 8500, 'Preferente': 5500, 'General': 2800 };
-    const precio   = precios[categoria] || 2800;
+    const cantidad  = parseInt(f.cantidad?.value || '1');
+    const precios   = { 'VIP': 8500, 'Preferente': 5500, 'General': 2800 };
+    const precio    = precios[categoria] || 2800;
 
-    // Crear Lead en CRM
     const leadId = await odoo.createLead({
       name: `Boleto FIFA — ${categoria} × ${cantidad} — ${nombre}`,
       contactName: nombre,
@@ -249,13 +246,11 @@ window.submitBoletoFIFA = async function(e) {
       phone: telefono,
       description: `Evento: Copa Mundial FIFA — Inauguración\nCategoría: ${categoria}\nCantidad: ${cantidad}\nTotal: $${(precio * cantidad).toLocaleString()} MXN`,
     });
-
     showToast(
       '¡Pre-registro completado!',
       `${cantidad} boleto(s) ${categoria} registrado(s). ID: #${leadId}. Recibirás instrucciones de pago en tu correo.`
     );
     f.reset();
-    // Mostrar sección de pago
     const paySection = document.getElementById('pago-section');
     if (paySection) {
       paySection.style.display = 'block';
@@ -266,8 +261,7 @@ window.submitBoletoFIFA = async function(e) {
 
 // ── NAVBAR ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // Hamburger
-  const ham = document.getElementById('hamburger');
+  const ham  = document.getElementById('hamburger');
   const menu = document.getElementById('nav-menu');
   ham?.addEventListener('click', () => {
     menu.classList.toggle('open');
@@ -282,17 +276,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Scroll reveal
   const revealEls = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  const observer  = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   revealEls.forEach(el => observer.observe(el));
 
-  // Tabs
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const group = btn.closest('.tab-group');
+      const group  = btn.closest('.tab-group');
       const target = btn.dataset.tab;
       group.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       group.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -301,29 +293,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Active nav link
   const path = window.location.pathname;
   document.querySelectorAll('.nav-link').forEach(a => {
-    if (a.getAttribute('href') && path.includes(a.getAttribute('href').replace('.html',''))) {
+    if (a.getAttribute('href') && path.includes(a.getAttribute('href').replace('.html', ''))) {
       a.classList.add('active');
     }
   });
 });
 
-// ── ANIMATE NUMBERS ──────────────────────────────────────────────
+// ── ANIMATE NUMBERS ─────────────────────────────────────────────
 function animateNumber(el, target, duration = 1500) {
-  const start = performance.now();
+  const start  = performance.now();
   const update = (now) => {
     const progress = Math.min((now - start) / duration, 1);
-    const val = Math.floor(progress * target);
-    el.textContent = val.toLocaleString();
+    el.textContent  = Math.floor(progress * target).toLocaleString();
     if (progress < 1) requestAnimationFrame(update);
     else el.textContent = target.toLocaleString();
   };
   requestAnimationFrame(update);
 }
 
-// Observe stat numbers
 document.addEventListener('DOMContentLoaded', () => {
   const statNums = document.querySelectorAll('[data-count]');
   const obs = new IntersectionObserver(entries => {
