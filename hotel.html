@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel — Mundo Charro</title>
+  <meta name="description" content="Hotel de gran lujo en Mundo Charro. 150 habitaciones y suites con la elegancia de la tradición charra.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="logo"><span class="logo-text">Mundo<span> Charro</span></span></a>
+  <ul class="nav-menu" id="nav-menu">
+    <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+    <li class="nav-item"><a href="mundo-charro.html" class="nav-link">Mundo Charro ▾</a><div class="dropdown-menu"><a href="mundo-charro.html#historia">Historia</a><a href="mundo-charro.html#cultura">Cultura</a><a href="mundo-charro.html#ecosistema">El Ecosistema</a><a href="mundo-charro.html#ubicacion">Ubicación</a></div></li>
+    <li class="nav-item"><a href="hotel.html" class="nav-link active">Hotel ▾</a><div class="dropdown-menu"><a href="#habitaciones">Habitaciones</a><a href="#amenidades">Amenidades</a><a href="#galeria">Galería</a><a href="#reservas">Reservaciones</a></div></li>
+    <li class="nav-item"><a href="convenciones.html" class="nav-link">Convenciones ▾</a><div class="dropdown-menu"><a href="convenciones.html#espacios">Espacios</a><a href="convenciones.html#propuesta">Solicitar Propuesta</a></div></li>
+    <li class="nav-item"><a href="eventos.html" class="nav-link">Eventos ▾</a><div class="dropdown-menu"><a href="eventos.html#fifa">Copa Mundial FIFA</a><a href="eventos.html#boletos">Comprar Boletos</a></div></li>
+    <li class="nav-item"><a href="corporativo.html" class="nav-link">Corporativo ▾</a><div class="dropdown-menu"><a href="corporativo.html#quienes">Quiénes Somos</a><a href="corporativo.html#inversionistas">Inversionistas</a></div></li>
+    <li class="nav-item"><a href="#reservas" class="nav-link nav-cta">Reservar</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-content">
+    <div class="section-eyebrow" style="justify-content:center">Hospedaje de Lujo</div>
+    <h1 class="section-title" style="font-size:clamp(2.5rem,5vw,4.5rem)">Hotel<em>Mundo Charro</em></h1>
+    <p style="color:var(--text-muted);max-width:560px;margin:0 auto;font-size:1.1rem">150 habitaciones y suites diseñadas para ofrecerte el descanso más placentero, rodeado de la elegancia y tradición de México.</p>
+  </div>
+</div>
+
+<!-- HABITACIONES -->
+<section class="section section-darkerer" id="habitaciones">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">Habitaciones</div>
+      <h2 class="section-title">Tu <em>santuario privado</em></h2>
+      <div class="gold-divider"></div>
+    </div>
+
+    <div class="tab-group" style="margin-top:2.5rem">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="estandar">Estándar</button>
+        <button class="tab-btn" data-tab="deluxe">Deluxe</button>
+        <button class="tab-btn" data-tab="suite">Suite Charra</button>
+        <button class="tab-btn" data-tab="presidencial">Suite Presidencial</button>
+      </div>
+
+      <div id="tab-estandar" class="tab-panel active">
+        <div class="grid-2" style="align-items:center;gap:3rem">
+          <div>
+            <div class="card-img-placeholder" style="height:340px;font-size:5rem">🛏️</div>
+          </div>
+          <div>
+            <div class="badge badge-terra" style="margin-bottom:1rem">Desde $2,800 MXN / noche</div>
+            <h3 style="font-family:var(--font-display);font-size:2rem;color:var(--charcoal);margin-bottom:1rem">Habitación Estándar</h3>
+            <p style="color:var(--text-muted);margin-bottom:1.5rem">Espacio acogedor de 35 m² con vista al jardín o patio interior. Decoración inspirada en la charrería con detalles en cuero artesanal y madera tallada.</p>
+            <ul style="color:var(--text-muted);list-style:none;font-size:0.95rem;line-height:2">
+              <li>✦ Cama King o dos Queen</li>
+              <li>✦ TV 55" Smart</li>
+              <li>✦ Baño con regadera de lluvia</li>
+              <li>✦ Wi-Fi de alta velocidad</li>
+              <li>✦ Minibar artesanal</li>
+              <li>✦ Clima individual</li>
+            </ul>
+            <a href="#reservas" class="btn btn-terra" style="margin-top:1.5rem">Reservar esta habitación</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-deluxe" class="tab-panel">
+        <div class="grid-2" style="align-items:center;gap:3rem">
+          <div>
+            <div class="card-img-placeholder" style="height:340px;font-size:5rem">🌿</div>
+          </div>
+          <div>
+            <div class="badge badge-terra" style="margin-bottom:1rem">Desde $4,200 MXN / noche</div>
+            <h3 style="font-family:var(--font-display);font-size:2rem;color:var(--charcoal);margin-bottom:1rem">Habitación Deluxe</h3>
+            <p style="color:var(--text-muted);margin-bottom:1.5rem">48 m² con balcón privado y vista al campo de charreada. Acabados premium en mosaico talavera y herrería artesanal.</p>
+            <ul style="color:var(--text-muted);list-style:none;font-size:0.95rem;line-height:2">
+              <li>✦ Cama King Size premium</li>
+              <li>✦ Balcón privado con vista a lienzo</li>
+              <li>✦ Bañera de hidromasaje</li>
+              <li>✦ Sala de estar</li>
+              <li>✦ Servicio a cuartos 24/7</li>
+              <li>✦ Desayuno incluido</li>
+            </ul>
+            <a href="#reservas" class="btn btn-terra" style="margin-top:1.5rem">Reservar esta habitación</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-suite" class="tab-panel">
+        <div class="grid-2" style="align-items:center;gap:3rem">
+          <div>
+            <div class="card-img-placeholder" style="height:340px;font-size:5rem">⭐</div>
+          </div>
+          <div>
+            <div class="badge badge-terra" style="margin-bottom:1rem">Desde $8,500 MXN / noche</div>
+            <h3 style="font-family:var(--font-display);font-size:2rem;color:var(--charcoal);margin-bottom:1rem">Suite Charra</h3>
+            <p style="color:var(--text-muted);margin-bottom:1.5rem">85 m² de lujo auténtico. Cada suite está dedicada a un estado de la República, con piezas de arte original y artesanías únicas.</p>
+            <ul style="color:var(--text-muted);list-style:none;font-size:0.95rem;line-height:2">
+              <li>✦ Sala y comedor privados</li>
+              <li>✦ Terraza panorámica</li>
+              <li>✦ Jacuzzi exterior</li>
+              <li>✦ Mayordomo personal</li>
+              <li>✦ Cena de bienvenida incluida</li>
+              <li>✦ Acceso a Spa Ejecutivo</li>
+            </ul>
+            <a href="#reservas" class="btn btn-terra" style="margin-top:1.5rem">Reservar esta suite</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-presidencial" class="tab-panel">
+        <div class="grid-2" style="align-items:center;gap:3rem">
+          <div>
+            <div class="card-img-placeholder" style="height:340px;font-size:5rem">👑</div>
+          </div>
+          <div>
+            <div class="badge badge-terra" style="margin-bottom:1rem">Desde $22,000 MXN / noche</div>
+            <h3 style="font-family:var(--font-display);font-size:2rem;color:var(--charcoal);margin-bottom:1rem">Suite Presidencial</h3>
+            <p style="color:var(--text-muted);margin-bottom:1.5rem">200 m² de grandeza absoluta en el piso ejecutivo. La experiencia definitiva con acceso exclusivo y servicio inigualable.</p>
+            <ul style="color:var(--text-muted);list-style:none;font-size:0.95rem;line-height:2">
+              <li>✦ 2 recámaras + sala de negocios</li>
+              <li>✦ Rooftop privado con alberca</li>
+              <li>✦ Chef privado disponible</li>
+              <li>✦ Traslado en camioneta privada</li>
+              <li>✦ All Inclusive Premium</li>
+              <li>✦ Acceso VIP a todos los eventos</li>
+            </ul>
+            <a href="#reservas" class="btn btn-terra" style="margin-top:1.5rem">Solicitar disponibilidad</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AMENIDADES -->
+<section class="section section-darker" id="amenidades">
+  <div class="container">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto 3rem">
+      <div class="section-eyebrow">Servicios</div>
+      <h2 class="section-title">Amenidades <em>de clase mundial</em></h2>
+      <div class="gold-divider" style="margin:1.5rem auto"></div>
+    </div>
+    <div class="grid-4 reveal">
+      <div style="text-align:center;padding:2rem">
+        <div style="font-size:2.5rem;margin-bottom:1rem">🏊</div>
+        <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--charcoal);margin-bottom:0.5rem">Alberca Panorámica</div>
+        <p style="font-size:0.9rem;color:var(--text-muted)">Temperada todo el año con vista al campo de charreada</p>
+      </div>
+      <div style="text-align:center;padding:2rem">
+        <div style="font-size:2.5rem;margin-bottom:1rem">💆</div>
+        <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--charcoal);margin-bottom:0.5rem">Spa Charro</div>
+        <p style="font-size:0.9rem;color:var(--text-muted)">Tratamientos con ingredientes naturales mexicanos</p>
+      </div>
+      <div style="text-align:center;padding:2rem">
+        <div style="font-size:2.5rem;margin-bottom:1rem">🍽️</div>
+        <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--charcoal);margin-bottom:0.5rem">3 Restaurantes</div>
+        <p style="font-size:0.9rem;color:var(--text-muted)">Alta cocina mexicana, asador y terraza-bar</p>
+      </div>
+      <div style="text-align:center;padding:2rem">
+        <div style="font-size:2.5rem;margin-bottom:1rem">🏇</div>
+        <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--charcoal);margin-bottom:0.5rem">Clases Ecuestres</div>
+        <p style="font-size:0.9rem;color:var(--text-muted)">Aprende equitación con charros profesionales</p>
+      </div>
+      <div style="text-align:center;padding:2rem">
+        <div style="font-size:2.5rem;margin-bottom:1rem">🏋️</div>
+        <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--charcoal);margin-bottom:0.5rem">Gimnasio 24/7</div>
+        <p style="font-size:0.9rem;color:var(--text-muted)">Equipado con tecnología Technogym</p>
+      </div>
+      <div style="text-align:center;padding:2rem">
+        <div style="font-size:2.5rem;margin-bottom:1rem">👨‍👩‍👧</div>
+        <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--charcoal);margin-bottom:0.5rem">Club Infantil</div>
+        <p style="font-size:0.9rem;color:var(--text-muted)">Actividades culturales y recreativas para niños</p>
+      </div>
+      <div style="text-align:center;padding:2rem">
+        <div style="font-size:2.5rem;margin-bottom:1rem">🚗</div>
+        <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--charcoal);margin-bottom:0.5rem">Valet Parking</div>
+        <p style="font-size:0.9rem;color:var(--text-muted)">Estacionamiento con cámaras 24/7 incluido</p>
+      </div>
+      <div style="text-align:center;padding:2rem">
+        <div style="font-size:2.5rem;margin-bottom:1rem">📶</div>
+        <div style="font-family:var(--font-display);font-size:1.1rem;color:var(--charcoal);margin-bottom:0.5rem">Conectividad Total</div>
+        <p style="font-size:0.9rem;color:var(--text-muted)">Wi-Fi Gigabit en todas las instalaciones</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section class="section section-darkerer" id="galeria">
+  <div class="container reveal">
+    <div style="text-align:center;margin-bottom:3rem">
+      <div class="section-eyebrow">Galería</div>
+      <h2 class="section-title">Espacios que <em>inspiran</em></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,220px);gap:1rem">
+      <div style="background:var(--white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:3rem;grid-column:span 2;grid-row:span 2;border-radius:2px">🏨</div>
+      <div style="background:var(--white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:3rem;border-radius:2px">🛏️</div>
+      <div style="background:var(--white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:3rem;border-radius:2px">🏊</div>
+    </div>
+    <p style="text-align:center;color:var(--text-muted);margin-top:1rem;font-size:0.9rem">Aquí se mostrarán las fotografías profesionales del hotel</p>
+  </div>
+</section>
+
+<!-- RESERVAS -->
+<section class="section section-darker" id="reservas">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto 3.5rem" class="reveal">
+      <div class="section-eyebrow">Reservaciones</div>
+      <h2 class="section-title">Haz tu <em>reserva ahora</em></h2>
+      <div class="gold-divider" style="margin:1.5rem auto"></div>
+      <p style="color:var(--text-muted)">Completa el formulario y nuestro equipo confirmará tu reserva en menos de 2 horas. Tu solicitud se registra automáticamente en nuestro sistema.</p>
+    </div>
+    <div style="max-width:720px;margin:0 auto;background:var(--white);border:1px solid var(--border);padding:3rem" class="reveal">
+      <form onsubmit="submitHotelReserva(event)">
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Nombre completo *</label>
+            <input type="text" name="nombre" class="form-control" placeholder="Tu nombre" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Teléfono *</label>
+            <input type="tel" name="telefono" class="form-control" placeholder="+52 (442)" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input type="email" name="email" class="form-control" placeholder="tu@correo.com" required>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Check-in *</label>
+            <input type="date" name="checkin" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Check-out *</label>
+            <input type="date" name="checkout" class="form-control" required>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Tipo de habitación</label>
+            <select name="habitacion" class="form-control">
+              <option value="Estándar">Estándar — desde $2,800/noche</option>
+              <option value="Deluxe">Deluxe — desde $4,200/noche</option>
+              <option value="Suite Charra">Suite Charra — desde $8,500/noche</option>
+              <option value="Suite Presidencial">Suite Presidencial — desde $22,000/noche</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Número de huéspedes</label>
+            <select name="huespedes" class="form-control">
+              <option>1 persona</option>
+              <option>2 personas</option>
+              <option>3 personas</option>
+              <option>4 personas</option>
+              <option>Más de 4</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Solicitudes especiales</label>
+          <textarea name="notas" class="form-control" rows="3" placeholder="Aniversario, alergias, preferencias, accesibilidad..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-terra" style="width:100%;font-size:0.8rem">
+          Solicitar Reservación
+        </button>
+        <div class="odoo-badge" style="justify-content:center;margin-top:0.8rem">
+          <span class="odoo-dot"></span> Tu solicitud se registra automáticamente en Odoo CRM
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo-text">✦ Mundo Charro</div><p class="footer-desc">Una experiencia única que celebra la tradición, la cultura y el espíritu charro de México.</p></div>
+      <div><div class="footer-heading">Hotel</div><ul class="footer-links"><li><a href="#habitaciones">Habitaciones</a></li><li><a href="#amenidades">Amenidades</a></li><li><a href="#galeria">Galería</a></li><li><a href="#reservas">Reservaciones</a></li></ul></div>
+      <div><div class="footer-heading">Corporativo</div><ul class="footer-links"><li><a href="corporativo.html#quienes">Quiénes Somos</a></li><li><a href="corporativo.html#inversionistas">Inversionistas</a></li></ul></div>
+      <div><div class="footer-heading">Contacto</div><ul class="footer-links"><li><a href="tel:+524421234567">+52 (442) 123-4567</a></li><li><a href="mailto:reservas@mundocharro.mx">reservas@mundocharro.mx</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>Mundo Charro © 2026. Todos los derechos reservados.</span><span>Integrado con Odoo CRM</span></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

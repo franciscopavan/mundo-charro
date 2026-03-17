@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventos & Copa Mundial FIFA — Mundo Charro</title>
+  <meta name="description" content="Copa Mundial de la FIFA 2026 en Mundo Charro. Compra tus boletos para la inauguración. Preventa activa.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .fifa-hero {
+      background: linear-gradient(160deg, var(--cream) 0%, var(--cream2) 60%, var(--cream3) 100%);
+      min-height: 70vh;
+      display: flex; align-items: center;
+      padding: 8rem 2rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .fifa-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(139,94,60,0.1) 0%, transparent 60%);
+    }
+    .ticket-card {
+      background: var(--white);
+      border: 1px solid rgba(139,94,60,0.12);
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .ticket-card:hover, .ticket-card.selected {
+      border-color: var(--terra);
+      box-shadow: 0 8px 32px rgba(139,94,60,0.12);
+      transform: translateY(-4px);
+    }
+    .ticket-card.selected {
+      background: rgba(139,94,60,0.05);
+    }
+    .ticket-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(201,151,58,0.1);
+    }
+    .ticket-category {
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .ticket-price {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--terra);
+      line-height: 1;
+      margin: 0.5rem 0;
+    }
+    .ticket-price sup { font-size: 1rem; vertical-align: top; margin-top: 0.5rem; }
+    .ticket-body { padding: 1.5rem; }
+    .ticket-feature {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.9rem; color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .ticket-feature::before { content: '✦'; color: var(--terra); font-size: 0.5rem; }
+
+    .countdown {
+      display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;
+      margin: 2rem 0;
+    }
+    .countdown-unit { text-align: center; }
+    .countdown-num { font-family:var(--font-display); font-size:2.8rem; color:var(--charcoal); display:block; line-height:1; background:var(--cream2); border:1px solid var(--border); padding:0.8rem 1.2rem; min-width:80px; }
+      font-family: var(--font-display);
+      font-size: 3rem; color: var(--cream);
+      display: block; line-height: 1;
+      background: var(--white);
+      border: 1px solid rgba(139,94,60,0.12);
+      padding: 0.8rem 1.2rem;
+      min-width: 80px;
+    }
+    .countdown-label {
+      font-family: var(--font-ui);
+      font-size: 0.6rem; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--text-muted);
+      margin-top: 0.4rem;
+    }
+
+    .fifa-badge {
+      display: inline-flex; align-items: center; gap: 0.8rem;
+      background: rgba(139,26,26,0.3);
+      border: 1px solid rgba(200,50,50,0.4);
+      padding: 0.5rem 1.2rem;
+      border-radius: 2px;
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--terra);
+    }
+    .pulse { animation: pulse-badge 2s infinite; }
+    @keyframes pulse-badge { 0%,100%{opacity:1} 50%{opacity:0.6} }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="logo"><span class="logo-text">Mundo<span> Charro</span></span></a>
+  <ul class="nav-menu" id="nav-menu">
+    <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+    <li class="nav-item"><a href="mundo-charro.html" class="nav-link">Mundo Charro ▾</a><div class="dropdown-menu"><a href="mundo-charro.html#historia">Historia</a><a href="mundo-charro.html#cultura">Cultura</a><a href="mundo-charro.html#ecosistema">El Ecosistema</a></div></li>
+    <li class="nav-item"><a href="hotel.html" class="nav-link">Hotel ▾</a><div class="dropdown-menu"><a href="hotel.html#habitaciones">Habitaciones</a><a href="hotel.html#reservas">Reservaciones</a></div></li>
+    <li class="nav-item"><a href="convenciones.html" class="nav-link">Convenciones ▾</a><div class="dropdown-menu"><a href="convenciones.html#espacios">Espacios</a><a href="convenciones.html#propuesta">Solicitar Propuesta</a></div></li>
+    <li class="nav-item"><a href="eventos.html" class="nav-link active">Eventos ▾</a><div class="dropdown-menu"><a href="#fifa">Copa Mundial FIFA</a><a href="#boletos">Comprar Boletos</a><a href="#proximos">Próximos Eventos</a></div></li>
+    <li class="nav-item"><a href="corporativo.html" class="nav-link">Corporativo ▾</a><div class="dropdown-menu"><a href="corporativo.html#quienes">Quiénes Somos</a></div></li>
+    <li class="nav-item"><a href="#boletos" class="nav-link nav-cta">Comprar Boletos</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- FIFA HERO -->
+<section class="fifa-hero" id="fifa">
+  <div class="container" style="position:relative">
+    <div class="grid-2" style="align-items:center;gap:4rem">
+      <div>
+        <div class="fifa-badge" style="margin-bottom:1.5rem">
+          <span class="pulse" style="width:8px;height:8px;border-radius:50%;background:#E88080;display:inline-block"></span>
+          PREVENTA ACTIVA — Boletos Limitados
+        </div>
+        <h1 style="font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4.5rem);color:var(--charcoal);line-height:1.05;margin-bottom:1rem">
+          Copa Mundial<br>
+          <em style="font-style:italic;color:var(--terra)">de la FIFA 2026</em>
+        </h1>
+        <p style="color:var(--text-muted);font-size:1.1rem;margin-bottom:2rem">
+          Vive la Ceremonia de Inauguración en el estadio más espectacular de México. Sé parte de la historia del fútbol mundial.
+        </p>
+        <div style="display:flex;gap:0.8rem;flex-wrap:wrap">
+          <span class="badge badge-red">⚽ 11 de Junio, 2026</span>
+          <span class="badge badge-terra">📍 Mundo Charro, Querétaro</span>
+          <span class="badge badge-terra">🏟️ 12,000 Aficionados</span>
+        </div>
+        <div style="margin-top:2rem">
+          <a href="#boletos" class="btn btn-red">Comprar Boletos Ahora</a>
+          <a href="#proximos" class="btn btn-outline" style="margin-left:1rem">Más Eventos</a>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:8rem;line-height:1;margin-bottom:1rem">⚽</div>
+        <div style="font-family:var(--font-ui);font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem">Cuenta regresiva</div>
+        <div class="countdown" id="countdown">
+          <div class="countdown-unit"><span class="countdown-num" id="cd-d">--</span><div class="countdown-label">Días</div></div>
+          <div class="countdown-unit"><span class="countdown-num" id="cd-h">--</span><div class="countdown-label">Horas</div></div>
+          <div class="countdown-unit"><span class="countdown-num" id="cd-m">--</span><div class="countdown-label">Min</div></div>
+          <div class="countdown-unit"><span class="countdown-num" id="cd-s">--</span><div class="countdown-label">Seg</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKET CATEGORIES -->
+<section class="section section-darkerer" id="boletos">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto 3.5rem" class="reveal">
+      <div class="section-eyebrow">Preventa de Boletos</div>
+      <h2 class="section-title">Elige tu <em>experiencia FIFA</em></h2>
+      <div class="gold-divider" style="margin:1.5rem auto"></div>
+      <p style="color:var(--text-muted)">Selecciona la categoría que mejor se adapte a ti. Todos los boletos incluyen acceso al área de fanáticos y espectáculos previos.</p>
+    </div>
+
+    <div class="grid-3 reveal">
+      <!-- GENERAL -->
+      <div class="ticket-card" onclick="selectTicket('General',2800,this)">
+        <div class="ticket-header">
+          <div class="ticket-category" style="color:var(--text-muted)">Zona General</div>
+          <div class="ticket-price"><sup>$</sup>2,800 <small style="font-size:0.9rem;color:var(--text-muted)">MXN</small></div>
+          <div style="color:var(--text-muted);font-size:0.85rem">por persona</div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-feature">Acceso zona general del estadio</div>
+          <div class="ticket-feature">Pantallas gigantes</div>
+          <div class="ticket-feature">Zona de comida y bebida</div>
+          <div class="ticket-feature">Espectáculo charro previo</div>
+          <div class="ticket-feature">Recuerdo oficial del evento</div>
+        </div>
+        <div style="padding:0 1.5rem 1.5rem">
+          <div class="btn btn-outline" style="width:100%;text-align:center;justify-content:center">Seleccionar</div>
+        </div>
+      </div>
+
+      <!-- PREFERENTE -->
+      <div class="ticket-card" style="border-color:var(--border-mid)" onclick="selectTicket('Preferente',5500,this)">
+        <div style="background:var(--terra);padding:0.4rem;text-align:center;font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--dark);font-weight:600">
+          MÁS POPULAR
+        </div>
+        <div class="ticket-header">
+          <div class="ticket-category" style="color:var(--terra)">Zona Preferente</div>
+          <div class="ticket-price"><sup>$</sup>5,500 <small style="font-size:0.9rem;color:var(--text-muted)">MXN</small></div>
+          <div style="color:var(--text-muted);font-size:0.85rem">por persona</div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-feature">Asiento numerado en zona media</div>
+          <div class="ticket-feature">Vista privilegiada del campo</div>
+          <div class="ticket-feature">Acceso a lounge exclusivo</div>
+          <div class="ticket-feature">Bebida de bienvenida incluida</div>
+          <div class="ticket-feature">Todo lo de Zona General</div>
+          <div class="ticket-feature">Programa oficial FIFA</div>
+        </div>
+        <div style="padding:0 1.5rem 1.5rem">
+          <div class="btn btn-terra" style="width:100%;text-align:center;justify-content:center">Seleccionar</div>
+        </div>
+      </div>
+
+      <!-- VIP -->
+      <div class="ticket-card" onclick="selectTicket('VIP',8500,this)">
+        <div class="ticket-header">
+          <div class="ticket-category" style="color:#E8C070">Palco VIP</div>
+          <div class="ticket-price"><sup>$</sup>8,500 <small style="font-size:0.9rem;color:var(--text-muted)">MXN</small></div>
+          <div style="color:var(--text-muted);font-size:0.85rem">por persona</div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-feature">Palco privado con mejor vista</div>
+          <div class="ticket-feature">Catering gourmet incluido</div>
+          <div class="ticket-feature">Estacionamiento VIP</div>
+          <div class="ticket-feature">Acceso a área de jugadores</div>
+          <div class="ticket-feature">Fotografía con trofeo FIFA</div>
+          <div class="ticket-feature">Todo lo anterior incluido</div>
+          <div class="ticket-feature">Traslado hotel-estadio</div>
+        </div>
+        <div style="padding:0 1.5rem 1.5rem">
+          <div class="btn btn-outline" style="width:100%;text-align:center;justify-content:center">Seleccionar</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMULARIO DE COMPRA -->
+    <div style="max-width:680px;margin:4rem auto 0;background:var(--white);border:1px solid var(--border-mid);padding:3rem" class="reveal" id="form-compra">
+      <h3 style="font-family:var(--font-display);font-size:1.8rem;color:var(--charcoal);margin-bottom:0.5rem">Pre-registro de Boletos</h3>
+      <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:2rem">Registra tu interés y recibirás un correo con las instrucciones de pago en Odoo. Tu lugar queda reservado por 48 horas.</p>
+      <form onsubmit="submitBoletoFIFA(event)">
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Nombre completo *</label>
+            <input type="text" name="nombre" class="form-control" placeholder="Tu nombre" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Teléfono *</label>
+            <input type="tel" name="telefono" class="form-control" placeholder="+52 (442)" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input type="email" name="email" class="form-control" placeholder="tu@correo.com" required>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Categoría de boleto</label>
+            <select name="categoria" class="form-control" id="select-categoria">
+              <option value="General">General — $2,800 MXN</option>
+              <option value="Preferente" selected>Preferente — $5,500 MXN</option>
+              <option value="VIP">VIP / Palco — $8,500 MXN</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cantidad de boletos</label>
+            <select name="cantidad" class="form-control" id="select-cantidad">
+              <option value="1">1 boleto</option>
+              <option value="2">2 boletos</option>
+              <option value="3">3 boletos</option>
+              <option value="4">4 boletos</option>
+              <option value="5">5 boletos</option>
+              <option value="10">10 boletos (grupo)</option>
+            </select>
+          </div>
+        </div>
+        <!-- Total dinámico -->
+        <div style="background:rgba(139,94,60,0.05);border:1px solid var(--border-mid);padding:1.2rem;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center">
+          <span style="font-family:var(--font-ui);font-size:0.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted)">Total estimado</span>
+          <span id="total-display" style="font-family:var(--font-display);font-size:1.8rem;color:var(--terra)">$5,500 MXN</span>
+        </div>
+        <button type="submit" class="btn btn-red" style="width:100%">Registrar Pre-compra de Boletos</button>
+        <div class="odoo-badge" style="justify-content:center;margin-top:0.8rem">
+          <span class="odoo-dot"></span> Se crea un Lead en Odoo CRM automáticamente
+        </div>
+        <p style="text-align:center;color:var(--text-muted);font-size:0.8rem;margin-top:0.8rem">
+          El pago se procesa a través de Odoo Payments (Stripe / OXXO / transferencia)
+        </p>
+      </form>
+    </div>
+
+    <!-- SECCIÓN DE PAGO (aparece después del registro) -->
+    <div id="pago-section" style="display:none;max-width:680px;margin:2rem auto 0;background:rgba(26,100,26,0.1);border:1px solid rgba(50,180,50,0.3);padding:2rem;text-align:center">
+      <div style="font-size:3rem;margin-bottom:1rem">✅</div>
+      <h3 style="font-family:var(--font-display);font-size:1.5rem;color:var(--charcoal);margin-bottom:0.5rem">¡Pre-registro completado!</h3>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem">Te enviamos un correo con el link de pago de Odoo. También puedes pagar directamente:</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="#" class="btn btn-terra" onclick="alert('Redirigiendo a Odoo Payments...')">Pagar con Tarjeta (Stripe)</a>
+        <a href="#" class="btn btn-outline" onclick="alert('Instrucciones OXXO enviadas a tu correo')">Pagar en OXXO</a>
+        <a href="#" class="btn btn-outline" onclick="alert('Datos de transferencia enviados a tu correo')">Transferencia Bancaria</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRÓXIMOS EVENTOS -->
+<section class="section section-darker" id="proximos">
+  <div class="container reveal">
+    <div style="margin-bottom:3rem">
+      <div class="section-eyebrow">Calendario</div>
+      <h2 class="section-title">Próximos <em>Espectáculos</em></h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <div class="card" style="display:flex;align-items:center;gap:2rem;padding:1.5rem;flex-wrap:wrap">
+        <div style="text-align:center;min-width:70px">
+          <div style="font-family:var(--font-display);font-size:2rem;color:var(--terra);line-height:1">11</div>
+          <div style="font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase">Jun 2026</div>
+        </div>
+        <div style="flex:1">
+          <div class="badge badge-red" style="margin-bottom:0.5rem">⚽ Copa Mundial FIFA</div>
+          <div style="font-family:var(--font-display);font-size:1.2rem;color:var(--charcoal)">Ceremonia de Inauguración</div>
+          <div style="color:var(--text-muted);font-size:0.9rem">Centro de Espectáculos · 18:00 hrs</div>
+        </div>
+        <a href="#boletos" class="btn btn-red">Boletos</a>
+      </div>
+      <div class="card" style="display:flex;align-items:center;gap:2rem;padding:1.5rem;flex-wrap:wrap">
+        <div style="text-align:center;min-width:70px">
+          <div style="font-family:var(--font-display);font-size:2rem;color:var(--terra);line-height:1">15</div>
+          <div style="font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase">Ago 2025</div>
+        </div>
+        <div style="flex:1">
+          <div class="badge badge-terra" style="margin-bottom:0.5rem">🤠 Charrería</div>
+          <div style="font-family:var(--font-display);font-size:1.2rem;color:var(--charcoal)">Campeonato Nacional de Charrería</div>
+          <div style="color:var(--text-muted);font-size:0.9rem">Lienzo Charro Principal · Todo el día</div>
+        </div>
+        <a href="#" class="btn btn-terra">Próximamente</a>
+      </div>
+      <div class="card" style="display:flex;align-items:center;gap:2rem;padding:1.5rem;flex-wrap:wrap">
+        <div style="text-align:center;min-width:70px">
+          <div style="font-family:var(--font-display);font-size:2rem;color:var(--terra);line-height:1">22</div>
+          <div style="font-family:var(--font-ui);font-size:0.6rem;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase">Sep 2025</div>
+        </div>
+        <div style="flex:1">
+          <div class="badge badge-terra" style="margin-bottom:0.5rem">🎵 Música</div>
+          <div style="font-family:var(--font-display);font-size:1.2rem;color:var(--charcoal)">Noche de Mariachi y Folklor</div>
+          <div style="color:var(--text-muted);font-size:0.9rem">Plaza Central · 20:00 hrs</div>
+        </div>
+        <a href="#" class="btn btn-outline">Próximamente</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="logo-text">✦ Mundo Charro</div><p class="footer-desc">Centro de espectáculos de clase mundial en el corazón de Querétaro.</p></div>
+      <div><div class="footer-heading">Eventos</div><ul class="footer-links"><li><a href="#fifa">Copa Mundial FIFA</a></li><li><a href="#boletos">Comprar Boletos</a></li><li><a href="#proximos">Calendario</a></li></ul></div>
+      <div><div class="footer-heading">El Ecosistema</div><ul class="footer-links"><li><a href="hotel.html">Hotel</a></li><li><a href="convenciones.html">Convenciones</a></li></ul></div>
+      <div><div class="footer-heading">Contacto</div><ul class="footer-links"><li><a href="tel:+524421234567">+52 (442) 123-4567</a></li><li><a href="mailto:eventos@mundocharro.mx">eventos@mundocharro.mx</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>Mundo Charro © 2026. Todos los derechos reservados.</span><span>Integrado con Odoo CRM</span></div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+// Countdown timer to June 11, 2026
+function updateCountdown() {
+  const target = new Date('2026-06-11T18:00:00-06:00');
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) {
+    document.getElementById('countdown').innerHTML = '<div style="font-family:var(--font-display);font-size:2rem;color:var(--terra)">¡El evento ha comenzado!</div>';
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-d').textContent = String(d).padStart(2,'0');
+  document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// Ticket selection
+const prices = { 'General': 2800, 'Preferente': 5500, 'VIP': 8500 };
+function selectTicket(cat, price, el) {
+  document.querySelectorAll('.ticket-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('select-categoria').value = cat;
+  updateTotal();
+  document.getElementById('form-compra').scrollIntoView({ behavior: 'smooth' });
+}
+function updateTotal() {
+  const cat = document.getElementById('select-categoria').value;
+  const qty = parseInt(document.getElementById('select-cantidad').value);
+  const total = (prices[cat] || 5500) * qty;
+  document.getElementById('total-display').textContent = '$' + total.toLocaleString() + ' MXN';
+}
+document.getElementById('select-categoria')?.addEventListener('change', updateTotal);
+document.getElementById('select-cantidad')?.addEventListener('change', updateTotal);
+</script>
+</body>
+</html>
