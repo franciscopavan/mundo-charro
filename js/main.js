@@ -8,10 +8,18 @@ const WORKER_URL = "https://plain-violet-1e1a.pavanafrancisco.workers.dev";
 
 // ── CONFIGURACIÓN ODOO (otros formularios) ──────────────────────
 const ODOO_CONFIG = {
-  baseUrl: 'https://mundocharro.odoo.com/odoo',
+  baseUrl: 'https://mundocharro.odoo.com',
   db: 'mundocharro',
-  username: 'francisco.pavana@mundocharr.mx',
+  username: 'francisco.pavana@mundocharro.mx',
   password: 'cbd7980aef0e5a56d5b9f26abc18c5a53ad54109',
+};
+
+// Tags IDs en Odoo CRM
+const TAGS = {
+  hotel:        21,
+  convenciones: 22,
+  fifa:         23,
+  contacto:     24,
 };
 
 // ── ODOO JSON-RPC CLIENT ────────────────────────────────────────
@@ -25,11 +33,7 @@ class OdooAPI {
     const res = await fetch(`${this.config.baseUrl}${path}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'call',
-        params
-      })
+      body: JSON.stringify({ jsonrpc: '2.0', method: 'call', params })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error.data?.message || data.error.message);
@@ -64,7 +68,7 @@ class OdooAPI {
       email_from: data.email,
       phone: data.phone,
       description: data.description,
-      tag_ids: data.tagIds || [],
+      tag_ids: data.tagIds ? data.tagIds.map(id => [4, id]) : [],
       team_id: data.teamId || false,
       type: 'lead',
     });
@@ -78,13 +82,14 @@ class OdooAPI {
       phone: data.phone,
       description: data.description,
       expected_revenue: data.revenue || 0,
+      tag_ids: data.tagIds ? data.tagIds.map(id => [4, id]) : [],
       type: 'opportunity',
     });
   }
 
   async createSaleOrder(data) {
     const partnerId = await this.findOrCreatePartner(data);
-    const orderId = await this.createRecord('sale.order', {
+    return await this.createRecord('sale.order', {
       partner_id: partnerId,
       note: data.notes || '',
       order_line: data.lines.map(l => [0, 0, {
@@ -94,7 +99,6 @@ class OdooAPI {
         price_unit: l.price,
       }])
     });
-    return orderId;
   }
 
   async findOrCreatePartner(data) {
@@ -151,7 +155,7 @@ async function submitForm(btn, action) {
   }
 }
 
-// ── RESERVA HOTEL → CLOUDFLARE WORKER → ODOO ───────────────────
+// ── RESERVA HOTEL → CLOUDFLARE WORKER → ODOO (tag: Hotel) ──────
 window.submitHotelReserva = async function(e) {
   e.preventDefault();
   const f = e.target;
@@ -179,35 +183,32 @@ window.submitHotelReserva = async function(e) {
   });
 };
 
-// ── RESERVA CONVENCIONES → CRM LEAD ────────────────────────────
+// ── RESERVA CONVENCIONES → CRM LEAD (tag: Convenciones) ────────
 window.submitConvencionReserva = async function(e) {
   e.preventDefault();
   const f = e.target;
   const btn = f.querySelector('[type=submit]');
   await submitForm(btn, async () => {
-    const empresa    = f.empresa?.value    || '';
-    const contacto   = f.contacto?.value   || '';
-    const email      = f.email?.value      || '';
-    const telefono   = f.telefono?.value   || '';
-    const fecha      = f.fecha?.value      || '';
-    const espacio    = f.espacio?.value    || '';
-    const asistentes = f.asistentes?.value || '';
-    const tipoEvento = f.tipo_evento?.value || '';
-    const desc       = f.descripcion?.value || '';
-
     const leadId = await odoo.createLead({
-      name: `Evento Convenciones — ${empresa} | ${tipoEvento} | ${fecha}`,
-      contactName: contacto,
-      email,
-      phone: telefono,
-      description: `Empresa: ${empresa}\nFecha: ${fecha}\nEspacio: ${espacio}\nAsistentes: ${asistentes}\nTipo de evento: ${tipoEvento}\nDescripción: ${desc}`,
+      name: `Evento Convenciones — ${f.empresa?.value} | ${f.tipo_evento?.value} | ${f.fecha?.value}`,
+      contactName: f.contacto?.value || '',
+      email: f.email?.value || '',
+      phone: f.telefono?.value || '',
+      description:
+        `Empresa: ${f.empresa?.value || ''}\n` +
+        `Fecha: ${f.fecha?.value || ''}\n` +
+        `Espacio: ${f.espacio?.value || ''}\n` +
+        `Asistentes: ${f.asistentes?.value || ''}\n` +
+        `Tipo de evento: ${f.tipo_evento?.value || ''}\n` +
+        `Descripción: ${f.descripcion?.value || ''}`,
+      tagIds: [TAGS.convenciones],
     });
     showToast('¡Solicitud enviada!', `Propuesta recibida. ID: #${leadId}. Un ejecutivo te contactará en 24 hrs.`);
     f.reset();
   });
 };
 
-// ── CONTACTO GENERAL → CRM LEAD ────────────────────────────────
+// ── CONTACTO GENERAL → CRM LEAD (tag: Contacto) ────────────────
 window.submitContacto = async function(e) {
   e.preventDefault();
   const f = e.target;
@@ -219,13 +220,14 @@ window.submitContacto = async function(e) {
       email: f.email?.value || '',
       phone: f.telefono?.value || '',
       description: `Asunto: ${f.asunto?.value || ''}\nMensaje: ${f.mensaje?.value || ''}`,
+      tagIds: [TAGS.contacto],
     });
     showToast('¡Mensaje enviado!', `Gracias por contactarnos. ID: #${leadId}. Te respondemos pronto.`);
     f.reset();
   });
 };
 
-// ── COMPRA BOLETOS FIFA → SALE ORDER + LEAD ─────────────────────
+// ── COMPRA BOLETOS FIFA → CRM LEAD (tag: FIFA) ─────────────────
 window.submitBoletoFIFA = async function(e) {
   e.preventDefault();
   const f = e.target;
@@ -244,7 +246,12 @@ window.submitBoletoFIFA = async function(e) {
       contactName: nombre,
       email,
       phone: telefono,
-      description: `Evento: Copa Mundial FIFA — Inauguración\nCategoría: ${categoria}\nCantidad: ${cantidad}\nTotal: $${(precio * cantidad).toLocaleString()} MXN`,
+      description:
+        `Evento: Copa Mundial FIFA — Inauguración\n` +
+        `Categoría: ${categoria}\n` +
+        `Cantidad: ${cantidad}\n` +
+        `Total: $${(precio * cantidad).toLocaleString()} MXN`,
+      tagIds: [TAGS.fifa],
     });
     showToast(
       '¡Pre-registro completado!',
