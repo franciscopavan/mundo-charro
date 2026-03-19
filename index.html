@@ -200,27 +200,75 @@
 </section>
 
 <!-- FIFA BANNER -->
-<section style="background:var(--charcoal);padding:5rem 2rem;border-top:1px solid rgba(139,94,60,0.3)">
-  <div class="container reveal">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:3rem;flex-wrap:wrap">
-      <div>
-        <div class="section-eyebrow" style="color:var(--gold-light)">⚽ Evento Especial 2026</div>
-        <h2 style="font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);color:var(--cream);font-weight:400;line-height:1.1;margin-bottom:1rem">Copa Mundial <em style="font-style:italic;color:var(--terra)">de la FIFA</em></h2>
-        <p style="color:rgba(245,240,232,0.6);max-width:480px;font-weight:300;margin-bottom:1.5rem">Vive la Ceremonia de Inauguración en el escenario más espectacular de México. Boletos en preventa.</p>
-        <div style="display:flex;gap:0.8rem;flex-wrap:wrap">
-          <span class="badge badge-terra">11 Jun, 2026</span>
-          <span class="badge badge-gold">Hidalgo, México</span>
-        </div>
-      </div>
-      <div style="text-align:center">
-        <div style="font-family:var(--font-display);font-size:1.2rem;color:rgba(245,240,232,0.5);margin-bottom:0.3rem">Desde</div>
-        <div style="font-family:var(--font-display);font-size:3rem;color:var(--cream);line-height:1">$2,800 <span style="font-size:1.1rem;color:rgba(245,240,232,0.5)">MXN</span></div>
-        <a href="eventos.html#boletos" class="btn btn-terra" style="margin-top:1.5rem">Comprar Boletos</a>
-      </div>
-    </div>
+<!-- CARRUSEL NOTICIAS -->
+<section id="carrusel-noticias" style="position:relative;overflow:hidden;border-top:1px solid rgba(139,94,60,0.3)">
+  <div id="carrusel-slide" style="padding:4rem 5rem;display:grid;grid-template-columns:1fr auto;gap:4rem;align-items:center;min-height:280px;transition:background 0.6s;background:#1a1208;box-sizing:border-box">
+    <div id="carrusel-info"></div>
+    <div id="carrusel-cta" style="text-align:center;min-width:200px"></div>
+    <button id="btn-prev" onclick="carruselPrev()" style="display:none;position:absolute;top:50%;left:1.5rem;transform:translateY(-50%);width:44px;height:44px;background:rgba(245,240,232,0.08);border:1px solid rgba(245,240,232,0.15);color:#F5F0E8;font-size:1.5rem;cursor:pointer;border-radius:1px;z-index:10">‹</button>
+    <button id="btn-next" onclick="carruselNext()" style="display:none;position:absolute;top:50%;right:1.5rem;transform:translateY(-50%);width:44px;height:44px;background:rgba(245,240,232,0.08);border:1px solid rgba(245,240,232,0.15);color:#F5F0E8;font-size:1.5rem;cursor:pointer;border-radius:1px;z-index:10">›</button>
   </div>
+  <div id="carrusel-dots" style="display:flex;justify-content:center;gap:0.4rem;padding:1rem;transition:background 0.6s;background:#1a1208"></div>
 </section>
 
+<script>
+(function(){
+  const noticias = [
+    { tipo:'Evento Especial 2026', titulo:'Copa Mundial', subtitulo:'de la FIFA', desc:'Vive la Ceremonia de Inauguración en el escenario más espectacular de México. Boletos en preventa.', fecha:'11 Jun, 2026', lugar:'Hidalgo, México', precio:'$2,800', moneda:'MXN', cta:'Comprar Boletos', bg:'#1a1208', ctaHref:'eventos.html#boletos' },
+    { tipo:'Temporada 2025', titulo:'Nuevas Suites', subtitulo:'disponibles', desc:'Habitaciones renovadas con amenidades de primer nivel y vista panorámica al paisaje hidalguense.', fecha:'Mar, 2025', lugar:'Hotel Mundo Charro', precio:'$1,500', moneda:'MXN / noche', cta:'Reservar Ahora', bg:'#261612', ctaHref:'hotel.html#reservas' },
+    { tipo:'Convenciones', titulo:'Foro Empresarial', subtitulo:'Hidalgo 2025', desc:'El encuentro de líderes empresariales más importante de la región. Networking y conferencias magistrales.', fecha:'Feb, 2025', lugar:'Centro de Convenciones', precio:'Gratis', moneda:'registro', cta:'Registrarse', bg:'#1c1a0f', ctaHref:'convenciones.html#propuesta' },
+    { tipo:'Cultura', titulo:'Día Nacional', subtitulo:'del Charro', desc:'Celebración con jaripeo, música tradicional y gastronomía mexicana en el corazón de Singuilucan.', fecha:'Ene, 2025', lugar:'Singuilucan, Hgo.', precio:'$350', moneda:'MXN', cta:'Ver Programa', bg:'#1a0f0a', ctaHref:'eventos.html' },
+    { tipo:'Parque Temático', titulo:'Gran Apertura', subtitulo:'Septiembre 2025', desc:'Sé parte del evento más esperado del año. Descubre el nuevo Parque Temático Mundo Charro.', fecha:'Sep, 2025', lugar:'Singuilucan, Hgo.', precio:'Preventa', moneda:'disponible', cta:'Más Información', bg:'#0f1a0f', ctaHref:'mundo-charro.html#ecosistema' },
+  ]
+
+  let current = 0, timer = null
+
+  function render(){
+    const n = noticias[current]
+    document.getElementById('carrusel-slide').style.background = n.bg
+    document.getElementById('carrusel-dots').style.background = n.bg
+    document.getElementById('carrusel-info').innerHTML = `
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.2rem">
+        <div style="width:2rem;height:1px;background:var(--gold-light,#C4913A)"></div>
+        <span style="font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold-light,#C4913A);font-weight:400">⚡ ${n.tipo}</span>
+      </div>
+      <h2 style="font-family:var(--font-display,'Georgia',serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:400;color:var(--cream,#F5F0E8);line-height:1.1;margin:0 0 1rem">
+        ${n.titulo} <em style="font-style:italic;color:var(--terra,#C4913A)">${n.subtitulo}</em>
+      </h2>
+      <p style="font-size:0.9rem;color:rgba(245,240,232,0.6);line-height:1.7;max-width:520px;margin:0 0 1.5rem">${n.desc}</p>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <span style="font-size:0.7rem;letter-spacing:0.1em;padding:0.3rem 0.8rem;border:1px solid rgba(245,240,232,0.15);color:rgba(245,240,232,0.5)">${n.fecha}</span>
+        <span style="font-size:0.7rem;letter-spacing:0.1em;padding:0.3rem 0.8rem;border:1px solid rgba(245,240,232,0.15);color:rgba(245,240,232,0.5)">${n.lugar}</span>
+      </div>
+    `
+    document.getElementById('carrusel-cta').innerHTML = `
+      <p style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,240,232,0.4);margin:0 0 0.5rem">Desde</p>
+      <p style="font-family:var(--font-display,'Georgia',serif);font-size:2.8rem;color:var(--cream,#F5F0E8);line-height:1;margin:0 0 0.3rem">
+        ${n.precio}<span style="font-size:0.85rem;color:rgba(245,240,232,0.4);margin-left:0.4rem">${n.moneda}</span>
+      </p>
+      <a href="${n.ctaHref}" class="btn btn-terra" style="display:block;margin-top:1.2rem;text-align:center">${n.cta}</a>
+    `
+    document.getElementById('carrusel-dots').innerHTML = noticias.map((_,i)=>`
+      <button onclick="window._carrusel.goTo(${i})" style="width:${i===current?'24px':'6px'};height:6px;border-radius:3px;background:${i===current?'var(--terra,#C4913A)':'rgba(245,240,232,0.2)'};border:none;cursor:pointer;transition:all 0.3s;padding:0"></button>
+    `).join('')
+  }
+
+  function restart(){ clearInterval(timer); timer = setInterval(()=>{ current=(current+1)%noticias.length; render() }, 4000) }
+
+  window._carrusel = {
+    goTo(i){ current=i; render(); restart() }
+  }
+  window.carruselNext = function(){ current=(current+1)%noticias.length; render() }
+  window.carruselPrev = function(){ current=(current-1+noticias.length)%noticias.length; render() }
+
+  const sec = document.getElementById('carrusel-noticias')
+  sec.addEventListener('mouseenter', ()=>{ clearInterval(timer); document.getElementById('btn-prev').style.display='flex'; document.getElementById('btn-next').style.display='flex' })
+  sec.addEventListener('mouseleave', ()=>{ document.getElementById('btn-prev').style.display='none'; document.getElementById('btn-next').style.display='none'; restart() })
+
+  render()
+  restart()
+})()
+</script>
 <!-- PLECA -->
 <div class="pleca"></div>
 
